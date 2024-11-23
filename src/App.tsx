@@ -1,17 +1,18 @@
-import Navbar from './components/Navbar/Navbar.tsx';
-import { Route, Routes } from 'react-router-dom';
-import Categories from './Categories/Categories.tsx';
+import React from 'react';
+import { Routes, Route } from 'react-router-dom';
+import Navbar from './components/Navbar/Navbar';
+import Categories from './containers/Categories/Categories';
+import Transactions from './containers/Transactions/Transactions';
 
-const App = () => {
-  return (
-    <div>
+const App: React.FC = () => {
+  return (<>
       <Navbar />
       <Routes>
-        <Route path="/" element={<Categories />} />
+        <Route path="/" element={<Transactions />} />
+        <Route path="/categories" element={<Categories />} />
       </Routes>
-
-    </div>
-  );
+  </>
+);
 };
 
 export default App;

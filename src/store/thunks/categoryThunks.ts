@@ -14,14 +14,13 @@ export const addCategory = createAsyncThunk(
   }
 );
 
-
 export const fetchCategories = createAsyncThunk(
   "category/fetchCategories",
   async () => {
     try {
       const response = await axiosApi.get<ICategoryApi>("/categories.json");
+      console.log('Fetched categories from API:', response.data); // Для отладки
       const data = response.data;
-
 
       const categories: ICategory[] = Object.keys(data || {}).map((id) => ({
         id,
@@ -46,3 +45,10 @@ export const deleteCategory = createAsyncThunk(
   }
 );
 
+export const editCategory = createAsyncThunk<ICategory, { id: string; changes: ICategory }>(
+  'category/updateCategory',
+  async ({ id, changes }: { id: string; changes: ICategory }) => {
+    const response = await axiosApi.put(`/categories/${id}.json`, changes);
+    return response.data;
+  }
+);

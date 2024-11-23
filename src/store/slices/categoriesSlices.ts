@@ -3,8 +3,9 @@ import { ICategory } from "../../types";
 import {
   addCategory,
   deleteCategory,
+  editCategory,
   fetchCategories,
-} from "../thunks/categoryThunks.ts";
+} from '../thunks/categoryThunks.ts';
 
 interface CategoryState {
   categories: ICategory[];
@@ -33,12 +34,10 @@ const categorySlice = createSlice({
       .addCase(addCategory.pending, (state) => {
         state.loadings.add = true;
       })
-      .addCase(addCategory.fulfilled,
-        (state, action: PayloadAction<ICategory>) => {
-          state.loadings.add = false;
-          state.categories.push(action.payload);
-        }
-      )
+      .addCase(addCategory.fulfilled, (state, action: PayloadAction<ICategory>) => {
+        state.loadings.add = false;
+        state.categories.push(action.payload);
+      })
       .addCase(addCategory.rejected, (state) => {
         state.loadings.add = false;
       })
@@ -46,12 +45,11 @@ const categorySlice = createSlice({
       .addCase(fetchCategories.pending, (state) => {
         state.loadings.fetching = true;
       })
-      .addCase(fetchCategories.fulfilled,
-        (state, action: PayloadAction<ICategory[]>) => {
-          state.loadings.fetching = false;
-          state.categories = action.payload; // Установка всех категорий
-        }
-      )
+      .addCase(fetchCategories.fulfilled, (state, action: PayloadAction<ICategory[]>) => {
+        state.loadings.fetching = false;
+        state.categories = action.payload; // Установка всех категорий
+        console.log('Fetched categories:', action.payload); // Для отладки
+      })
       .addCase(fetchCategories.rejected, (state) => {
         state.loadings.fetching = false;
       })
@@ -60,16 +58,30 @@ const categorySlice = createSlice({
         state.loadings.delete = true;
       })
       .addCase(deleteCategory.fulfilled, (state, action: PayloadAction<string>) => {
-          state.loadings.delete = false;
-          state.categories = state.categories.filter(
-            (category) => category.id !== action.payload
-          );
-        }
-      )
+        state.loadings.delete = false;
+        state.categories = state.categories.filter(
+          (category) => category.id !== action.payload
+        );
+      })
       .addCase(deleteCategory.rejected, (state) => {
         state.loadings.delete = false;
       })
 
+      .addCase(editCategory.pending, (state) => {
+        state.loadings.fetching = true;
+      })
+      .addCase(editCategory.fulfilled, (state, action: PayloadAction<ICategory>) => {
+        state.loadings.fetching = false;
+        const updatedCategory = action.payload;
+        console.log('Updated category:', updatedCategory); // Для отладки
+
+        state.categories = state.categories.map((category) =>
+          category.id === updatedCategory.id ? updatedCategory : category
+        );
+      })
+      .addCase(editCategory.rejected, (state) => {
+        state.loadings.fetching = false;
+      });
   },
 });
 

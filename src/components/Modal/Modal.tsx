@@ -14,8 +14,8 @@ const Modal: React.FC<ModalProps> = ({ show, onClose, children }) => {
       <div className="modal-dialog">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title" id="exampleModalLabel">Add New Category</h5>
-            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={onClose}></button>
+            <h5 className="modal-title" id="exampleModalLabel">{location.pathname === '/add-transaction' ? "Add Transaction" : "Add Category"}</h5>
+            <button type="button" className="btn-close" aria-label="Close" onClick={onClose}></button>
           </div>
           <div className="modal-body">
             {children}
