@@ -17,7 +17,7 @@ export interface ICategoryApi {
 export interface ITransaction {
   id?: string;
   time: string;
-  categoryName: string;
+  categoryId: string;
   amount: number;
   type: 'income' | 'expense';
 }

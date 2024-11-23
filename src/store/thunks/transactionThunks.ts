@@ -23,4 +23,21 @@ export const addTransaction = createAsyncThunk<ITransaction, ITransaction>(
   }
 );
 
+export const deleteTransaction = createAsyncThunk(
+  'transaction/delete',
+  async (id: string) => {
+    await axiosApi.delete(`/transactions/${id}.json`);
+    return id;
+  }
+);
+
+export const editTransaction = createAsyncThunk(
+  'transaction/update',
+  async (transaction: ITransaction) => {
+    const response = await axiosApi.put(
+      `/transactions/${transaction.id}.json`, transaction
+    );
+    return response.data;
+  }
+);
 

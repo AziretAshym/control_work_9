@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from '../../app/hooks';
 import { addTransaction } from '../../store/thunks/transactionThunks';
 import { ITransaction } from '../../types';
 import Spinner from '../UI/Spinner/Spinner';
-import { fetchCategories } from '../../store/thunks/categoryThunks.ts';
+import { fetchCategories } from '../../store/thunks/categoryThunks';
 
 interface TransactionFormProps {
   onClose: () => void;
@@ -19,7 +19,7 @@ const TransactionForm = ({ onClose, transaction }: TransactionFormProps) => {
     time: '',
     amount: 0,
     type: 'income',
-    categoryName: '',
+    categoryId: '',
   });
 
   useEffect(() => {
@@ -44,7 +44,7 @@ const TransactionForm = ({ onClose, transaction }: TransactionFormProps) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!formData.categoryName || !formData.amount) {
+    if (!formData.categoryId || !formData.amount) {
       alert('Please fill out all fields.');
       return;
     }
@@ -52,7 +52,7 @@ const TransactionForm = ({ onClose, transaction }: TransactionFormProps) => {
     const transactionData = {
       ...formData,
       amount: Number(formData.amount),
-      date: new Date().toISOString(),
+      time: new Date().toISOString(),
     };
 
     dispatch(addTransaction(transactionData));
@@ -81,31 +81,41 @@ const TransactionForm = ({ onClose, transaction }: TransactionFormProps) => {
           </div>
           <div>
             <label>Type</label>
-            <select className="form-control"
-                    name="type"
-                    value={formData.type}
-                    onChange={handleChange}
-                    required>
+            <select
+              className="form-control"
+              name="type"
+              value={formData.type}
+              onChange={handleChange}
+              required
+            >
               <option value="income">Income</option>
               <option value="expense">Expense</option>
             </select>
           </div>
           <div>
             <label>Category</label>
-            <select name="categoryId"
-                    className="form-control mb-4"
-                    value={formData.categoryName}
-                    onChange={handleChange}
-                    required>
+            <select
+              name="categoryId"
+              className="form-control mb-4"
+              value={formData.categoryId}
+              onChange={handleChange}
+              required
+            >
               <option value="">Select Category</option>
-              {filteredCategories.map((category) => (
-                <option key={category.id} value={category.id}>
-                  {category.name}
-                </option>
-              ))}
+              {filteredCategories.length > 0 ? (
+                filteredCategories.map((category) => (
+                  <option key={category.id} value={category.id}>
+                    {category.name}
+                  </option>
+                ))
+              ) : (
+                <option value="">No categories available</option>
+              )}
             </select>
           </div>
-          <button className="btn btn-outline-primary" type="submit">Save</button>
+          <button className="btn btn-outline-primary" type="submit">
+            Save
+          </button>
         </>
       )}
     </form>
