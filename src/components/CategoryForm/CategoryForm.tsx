@@ -3,7 +3,11 @@ import { ICategory } from "../../types";
 import { useAppDispatch } from "../../app/hooks.ts";
 import { addCategory } from "../../store/thunks/categoryThunks.ts";
 
-const CategoryForm: React.FC = () => {
+interface CategoryFormProps {
+  onClose: () => void;
+}
+
+const CategoryForm: React.FC<CategoryFormProps> = ({ onClose }) => {
   const initialState: ICategory = {
     type: "",
     name: "",
@@ -12,18 +16,17 @@ const CategoryForm: React.FC = () => {
   const [category, setCategory] = useState<ICategory>(initialState);
   const dispatch = useAppDispatch();
 
-
   const changeInput = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setCategory((prev) => ({ ...prev, [name]: value }));
   };
-
 
   const onSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       await dispatch(addCategory(category));
       setCategory(initialState);
+      onClose();
     } catch (e) {
       console.error(e);
     }
@@ -31,8 +34,7 @@ const CategoryForm: React.FC = () => {
 
   return (
     <>
-      <h3 className="text-center mb-4">Add new category</h3>
-      <form className="w-50 mx-auto" onSubmit={onSubmit}>
+      <form onSubmit={onSubmit}>
         <div className="input-group mb-3">
           <input
             type="text"

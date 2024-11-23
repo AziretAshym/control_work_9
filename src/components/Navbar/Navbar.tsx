@@ -3,7 +3,7 @@ const Navbar = () => {
   return (
     <nav className="navbar bg-primary-subtle mb-5">
       <div className="container">
-        <span className="navbar-brand mb-0 fs-2 fw-semibold">Navbar</span>
+        <span className="navbar-brand mb-0 fs-2 fw-semibold">Finance tracker</span>
         <div className="d-flex gap-3">
           <button className="btn btn-outline-primary">Categories</button>
           <button className="btn btn-outline-primary">Add</button>
